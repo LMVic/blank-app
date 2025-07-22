@@ -4,3 +4,4 @@ qrcode
 matplotlib
 openpyxl
 Pillow
+odfpy
