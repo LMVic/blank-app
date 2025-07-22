@@ -22,9 +22,9 @@ if uploaded_file:
         expanded_labels = []
         expanded_zones = []
         for _, row in df.iterrows():
-            for _ in range(int(row['CANTIDAD'])):
+            for _ in range(int(row['CANTIDAD ETIQUETAS'])):
                 expanded_labels.append(row.iloc[0])  # Dirección
-                expanded_zones.append(row.iloc[1])  # Zona
+                expanded_zones.append(row.iloc[2])  # Zona
 
         df_expanded = pd.DataFrame({'LABELS': expanded_labels, 'ZONES': expanded_zones})
 
