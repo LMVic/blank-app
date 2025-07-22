@@ -12,7 +12,7 @@ st.set_page_config(page_title="Generador de etiquetas QR", layout="centered")
 st.title("📦 Generador de etiquetas QR en PDF")
 st.markdown("Sube un archivo Excel con columnas **Dirección, Cantidad Etiquetas, Zona** para generar etiquetas.")
 
-uploaded_file = st.file_uploader("📁 Sube tu archivo Excel", type=["xlsx"])
+uploaded_file = st.file_uploader("📁 Sube tu archivo Excel", type=["xlsx" , "ods"])
 
 if uploaded_file:
     try:
@@ -35,7 +35,8 @@ if uploaded_file:
         zone_colors = {
             "PAS": "white", "ISL": "white", "POD": "#A7C7E7",
             "CDE": "#7EA7D7", "CTR": "#7EA7D7", "XSL": "#90EE90",
-            "CAJ": "#90EE90", "EXP": "#FFA07A", "IMP": "#90EE90", "ALT": "#FFA07A"
+            "CAJ": "#90EE90", "EXP": "#FFA07A", "IMP": "#90EE90", "ALT": "#FFA07A",
+            "10": "#FFFF14",  "20": "#FFA500",  "30": "#A7C7E7",  "40": "#90EE90",  "50": "#FF00FF",  "PC": "white",
         }
 
         def generate_a4_labels(labels, zones, cols, rows, page_size):
