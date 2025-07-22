@@ -10,7 +10,7 @@ from PIL import Image
 st.set_page_config(page_title="Generador de etiquetas QR", layout="centered")
 
 st.title("📦 Generador de etiquetas QR en PDF")
-st.markdown("Sube un archivo Excel con columnas **Dirección, Zona, Cantidad** para generar etiquetas.")
+st.markdown("Sube un archivo Excel con columnas **Dirección, Cantidad Etiquetas, Zona** para generar etiquetas.")
 
 uploaded_file = st.file_uploader("📁 Sube tu archivo Excel", type=["xlsx"])
 
