@@ -2,7 +2,7 @@ name: Keep Streamlit Awake
 
 on:
   schedule:
-    - cron: "0 */4 * * *"   # cada 4 horas (UTC)
+    - cron: "*/5 * * * *"   # cada 5 minutos (UTC)
   workflow_dispatch:         # permite lanzarlo manualmente desde Actions
 
 jobs:
