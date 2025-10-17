@@ -1,0 +1,72 @@
+name: Keep Streamlit Awake
+
+on:
+  schedule:
+    - cron: "0 */4 * * *"   # cada 4 horas (UTC)
+  workflow_dispatch:         # permite lanzarlo manualmente desde Actions
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout (no siempre necesario, pero seguro)
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Playwright
+        run: npm i -D playwright
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Wake Streamlit
+        env:
+          APP_URL: https://generar-etiquetas-a4.streamlit.app
+        run: |
+          cat > wake.js <<'JS'
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch();
+            const page = await browser.newPage({ timeout: 120000 });
+
+            // 1) Ir a la app
+            await page.goto(process.env.APP_URL, { waitUntil: 'domcontentloaded' });
+
+            // 2) Si está hibernada, aparecerá una página intermedia con un botón.
+            //   El texto suele ser "Yes, get this app back up!"
+            //   Añadimos selectores alternativos por si cambia el literal.
+            const selectors = [
+              'text="Yes, get this app back up!"',
+              'button:has-text("get this app back up")',
+              'text=/get this app back up/i'
+            ];
+
+            let clicked = false;
+            for (const sel of selectors) {
+              const el = await page.$(sel);
+              if (el) {
+                await el.click();
+                clicked = true;
+                break;
+              }
+            }
+
+            // 3) Esperar a que cargue del todo (ya despierta o ya estaba activa)
+            await page.waitForLoadState('networkidle');
+
+            // 4) Interacción mínima para que cuente como visita real
+            await page.evaluate(() => {
+              window.scrollBy(0, 100);
+            });
+
+            console.log(clicked ? "Wake button clicked" : "Already awake");
+            await browser.close();
+          })();
+          JS
+          node wake.js
